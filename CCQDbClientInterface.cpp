@@ -362,12 +362,18 @@ BaseTask CCQDbClientInterface::parseBaseTask(QSqlQuery &q)
     t.taskId          = q.value("task_id").toLongLong();
     t.productCodeList = q.value("product_code_list").toString().toStdString();
     t.comment         = q.value("comment").toString().toStdString();
-    t.startTime       = QDateTime::fromString(
-                            cleanDateTimeString(q.value("start_time").toString()),
-                            Qt::ISODate);
-    t.finishTime      = QDateTime::fromString(
-                            cleanDateTimeString(q.value("finish_time").toString()),
-                            Qt::ISODate);
+    {
+        QString s = q.value("start_time").toString();
+        s.remove('"');
+        s.replace('T', ' ');
+        t.startTime = CCDateTime::fromString(s.toStdString());
+    }
+    {
+        QString s = q.value("finish_time").toString();
+        s.remove('"');
+        s.replace('T', ' ');
+        t.finishTime = CCDateTime::fromString(s.toStdString());
+    }
     t.operatorName    = q.value("operator_name").toString().toStdString();
     t.operatorRole    = q.value("operator_role").toInt();
     t.isSpotCheck     = q.value("is_spot_check").toInt();

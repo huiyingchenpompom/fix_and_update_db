@@ -48,8 +48,8 @@ struct BaseTask
     int64_t         taskId = 0;
     std::string     productCodeList;
     std::string     comment;
-    QDateTime       startTime;
-    QDateTime       finishTime;
+    CCDateTime      startTime;
+    CCDateTime      finishTime;
     std::string     operatorName;
     int             operatorRole = 0;
     int             isSpotCheck = 0;
