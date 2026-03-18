@@ -11,45 +11,14 @@
 
 namespace UiDb {
 
-// ─────────────────────────────────────────────────────────────────────────────
-// CCDateTime  –  datetime value type used by database result structs
-// ─────────────────────────────────────────────────────────────────────────────
-class CCDateTime
-{
-public:
-    CCDateTime() = default;
-
-    // Parse a datetime string of the form "yyyy-MM-dd HH:mm:ss".
-    // Caller is expected to have already stripped surrounding quotes and
-    // replaced the ISO 'T' separator with a space.
-    static CCDateTime fromString(const std::string &s)
-    {
-        CCDateTime dt;
-        dt.m_dt = QDateTime::fromString(QString::fromStdString(s),
-                                        QStringLiteral("yyyy-MM-dd HH:mm:ss"));
-        return dt;
-    }
-
-    QString toString(Qt::DateFormat fmt = Qt::ISODate) const
-    {
-        return m_dt.toString(fmt);
-    }
-
-    bool isValid() const { return m_dt.isValid(); }
-    QDateTime toQDateTime() const { return m_dt; }
-
-private:
-    QDateTime m_dt;
-};
-
 // 任务表
 struct BaseTask
 {
     int64_t         taskId = 0;
     std::string     productCodeList;
     std::string     comment;
-    CCDateTime      startTime;
-    CCDateTime      finishTime;
+    QDateTime       startTime;
+    QDateTime       finishTime;
     std::string     operatorName;
     int             operatorRole = 0;
     int             isSpotCheck = 0;
@@ -91,7 +60,7 @@ struct BaseTrivisionResult
     int             defectConfirm = 0;
     std::string     defectPolygon;
     int             reinspectionResult = 0;
-    CCDateTime      reinspectionTime;
+    QDateTime       reinspectionTime;
     std::string     reinspectionOperator;
     std::string     finalResult;
 };
@@ -109,10 +78,10 @@ struct BaseWorkpieceInspectionResult {
     int             isNg = 0;
     int             isSpotCheck = 0;
     int             unloadingPort = 0;
-    CCDateTime      classfiedDatetime;
+    QDateTime       classfiedDatetime;
     std::string     reinspectionOperator;
     std::string     reinspectionResult;
-    CCDateTime      reinspectionTime;
+    QDateTime       reinspectionTime;
     std::string     finalResult;
     std::string     sn1;
     std::string     sn2;
@@ -134,7 +103,7 @@ struct BaseWorkpieceInspectionResult1{
     std::string     sn;
     std::string     defectCode;
     int             isNg = 0;
-    CCDateTime      classfiedDatetime;
+    QDateTime       classfiedDatetime;
     std::string     finalResult;
     std::string     reinspectionResult;
     std::string     sn1;

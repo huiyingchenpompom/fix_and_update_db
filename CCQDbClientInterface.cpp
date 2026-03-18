@@ -247,7 +247,7 @@ CCQDbClientInterface::parseFullWorkpieceResult(QSqlQuery &q)
         QString s = q.value("classfied_datetime").toString();
         s.remove('"');
         s.replace('T', ' ');
-        r.classfiedDatetime = CCDateTime::fromString(s.toStdString());
+        r.classfiedDatetime = QDateTime::fromString(s, QStringLiteral("yyyy-MM-dd HH:mm:ss"));
     }
     r.reinspectionOperator = q.value("reinspection_operator").toString().toStdString();
     r.reinspectionResult   = q.value("reinspection_result").toString().toStdString();
@@ -255,7 +255,7 @@ CCQDbClientInterface::parseFullWorkpieceResult(QSqlQuery &q)
         QString s = q.value("reinspection_time").toString();
         s.remove('"');
         s.replace('T', ' ');
-        r.reinspectionTime = CCDateTime::fromString(s.toStdString());
+        r.reinspectionTime = QDateTime::fromString(s, QStringLiteral("yyyy-MM-dd HH:mm:ss"));
     }
     r.finalResult          = q.value("final_result").toString().toStdString();
     r.sn1                  = q.value("sn1").toString().toStdString();
@@ -286,7 +286,7 @@ CCQDbClientInterface::parseLiteWorkpieceResult(QSqlQuery &q)
         QString s = q.value("classfied_datetime").toString();
         s.remove('"');
         s.replace('T', ' ');
-        r.classfiedDatetime = CCDateTime::fromString(s.toStdString());
+        r.classfiedDatetime = QDateTime::fromString(s, QStringLiteral("yyyy-MM-dd HH:mm:ss"));
     }
     r.finalResult         = q.value("final_result").toString().toStdString();
     r.reinspectionResult  = q.value("reinspection_result").toString().toStdString();
@@ -333,7 +333,7 @@ CCQDbClientInterface::parseFullTrivisionResult(QSqlQuery &q)
         QString s = q.value("reinspection_time").toString();
         s.remove('"');
         s.replace('T', ' ');
-        r.reinspectionTime = CCDateTime::fromString(s.toStdString());
+        r.reinspectionTime = QDateTime::fromString(s, QStringLiteral("yyyy-MM-dd HH:mm:ss"));
     }
     r.reinspectionOperator = q.value("reinspection_operator").toString().toStdString();
     r.finalResult          = q.value("final_result").toString().toStdString();
@@ -366,13 +366,13 @@ BaseTask CCQDbClientInterface::parseBaseTask(QSqlQuery &q)
         QString s = q.value("start_time").toString();
         s.remove('"');
         s.replace('T', ' ');
-        t.startTime = CCDateTime::fromString(s.toStdString());
+        t.startTime = QDateTime::fromString(s, QStringLiteral("yyyy-MM-dd HH:mm:ss"));
     }
     {
         QString s = q.value("finish_time").toString();
         s.remove('"');
         s.replace('T', ' ');
-        t.finishTime = CCDateTime::fromString(s.toStdString());
+        t.finishTime = QDateTime::fromString(s, QStringLiteral("yyyy-MM-dd HH:mm:ss"));
     }
     t.operatorName    = q.value("operator_name").toString().toStdString();
     t.operatorRole    = q.value("operator_role").toInt();
