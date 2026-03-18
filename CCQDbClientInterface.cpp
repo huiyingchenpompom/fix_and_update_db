@@ -243,9 +243,12 @@ CCQDbClientInterface::parseFullWorkpieceResult(QSqlQuery &q)
     r.isNg                 = q.value("is_ng").toInt();
     r.isSpotCheck          = q.value("is_spot_check").toInt();
     r.unloadingPort        = q.value("unloading_port").toInt();
-    r.classfiedDatetime    = QDateTime::fromString(
-                                 cleanDateTimeString(q.value("classified_datetime").toString()),
-                                 Qt::ISODate);
+    {
+        QString s = q.value("classified_datetime").toString();
+        s.remove('"');
+        s.replace('T', ' ');
+        r.classfiedDatetime = CCDateTime::fromString(s.toStdString());
+    }
     r.reinspectionOperator = q.value("reinspection_operator").toString().toStdString();
     r.reinspectionResult   = q.value("reinspection_result").toString().toStdString();
     r.reinspectionTime     = QDateTime::fromString(
@@ -276,9 +279,12 @@ CCQDbClientInterface::parseLiteWorkpieceResult(QSqlQuery &q)
     r.sn                  = q.value("sn").toString().toStdString();
     r.defectCode          = q.value("defect_code").toString().toStdString();
     r.isNg                = q.value("is_ng").toInt();
-    r.classfiedDatetime   = QDateTime::fromString(
-                                cleanDateTimeString(q.value("classified_datetime").toString()),
-                                Qt::ISODate);
+    {
+        QString s = q.value("classified_datetime").toString();
+        s.remove('"');
+        s.replace('T', ' ');
+        r.classfiedDatetime = CCDateTime::fromString(s.toStdString());
+    }
     r.finalResult         = q.value("final_result").toString().toStdString();
     r.reinspectionResult  = q.value("reinspection_result").toString().toStdString();
     r.sn1                 = q.value("sn1").toString().toStdString();

@@ -11,6 +11,21 @@
 
 namespace UiDb {
 
+// ─────────────────────────────────────────────────────────────────────────────
+// CCDateTime  –  helper for parsing database datetime strings
+// ─────────────────────────────────────────────────────────────────────────────
+struct CCDateTime
+{
+    // Parse a datetime string of the form "yyyy-MM-dd HH:mm:ss"
+    // (quotes are stripped and the ISO 'T' separator is already replaced
+    //  by a space before calling this function).
+    static QDateTime fromString(const std::string &s)
+    {
+        return QDateTime::fromString(QString::fromStdString(s),
+                                     QStringLiteral("yyyy-MM-dd HH:mm:ss"));
+    }
+};
+
 // 任务表
 struct BaseTask
 {
