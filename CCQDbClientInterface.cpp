@@ -244,16 +244,19 @@ CCQDbClientInterface::parseFullWorkpieceResult(QSqlQuery &q)
     r.isSpotCheck          = q.value("is_spot_check").toInt();
     r.unloadingPort        = q.value("unloading_port").toInt();
     {
-        QString s = q.value("classified_datetime").toString();
+        QString s = q.value("classfied_datetime").toString();
         s.remove('"');
         s.replace('T', ' ');
         r.classfiedDatetime = CCDateTime::fromString(s.toStdString());
     }
     r.reinspectionOperator = q.value("reinspection_operator").toString().toStdString();
     r.reinspectionResult   = q.value("reinspection_result").toString().toStdString();
-    r.reinspectionTime     = QDateTime::fromString(
-                                 cleanDateTimeString(q.value("reinspection_time").toString()),
-                                 Qt::ISODate);
+    {
+        QString s = q.value("reinspection_time").toString();
+        s.remove('"');
+        s.replace('T', ' ');
+        r.reinspectionTime = CCDateTime::fromString(s.toStdString());
+    }
     r.finalResult          = q.value("final_result").toString().toStdString();
     r.sn1                  = q.value("sn1").toString().toStdString();
     r.sn2                  = q.value("sn2").toString().toStdString();
@@ -280,7 +283,7 @@ CCQDbClientInterface::parseLiteWorkpieceResult(QSqlQuery &q)
     r.defectCode          = q.value("defect_code").toString().toStdString();
     r.isNg                = q.value("is_ng").toInt();
     {
-        QString s = q.value("classified_datetime").toString();
+        QString s = q.value("classfied_datetime").toString();
         s.remove('"');
         s.replace('T', ' ');
         r.classfiedDatetime = CCDateTime::fromString(s.toStdString());
@@ -326,9 +329,12 @@ CCQDbClientInterface::parseFullTrivisionResult(QSqlQuery &q)
     r.defectConfirm        = q.value("defect_confirm").toInt();
     r.defectPolygon        = q.value("defect_polygon").toString().toStdString();
     r.reinspectionResult   = q.value("reinspection_result").toInt();
-    r.reinspectionTime     = QDateTime::fromString(
-                                 cleanDateTimeString(q.value("reinspection_time").toString()),
-                                 Qt::ISODate);
+    {
+        QString s = q.value("reinspection_time").toString();
+        s.remove('"');
+        s.replace('T', ' ');
+        r.reinspectionTime = CCDateTime::fromString(s.toStdString());
+    }
     r.reinspectionOperator = q.value("reinspection_operator").toString().toStdString();
     r.finalResult          = q.value("final_result").toString().toStdString();
     return r;
@@ -551,7 +557,7 @@ CCQDbClientInterface::getBaseWorkpieceInspectionResultByTaskIdIp(
 
     QSqlQuery q(guard.db());
     q.prepare("SELECT task_id, product_code, workpiece_id, sn, defect_code, "
-              "is_ng, classified_datetime, final_result, reinspection_result, sn1 "
+              "is_ng, classfied_datetime, final_result, reinspection_result, sn1 "
               "FROM base_workpiece_inspection_result "
               "WHERE task_id = :taskId");
     q.bindValue(":taskId", taskId);
@@ -666,7 +672,7 @@ CCQDbClientInterface::getBaseWorkpieceInspectionResultsForDeviceSince(
 
     QSqlQuery q(guard.db());
     q.prepare("SELECT * FROM base_workpiece_inspection_result "
-              "WHERE classified_datetime >= :since");
+              "WHERE classfied_datetime >= :since");
     q.bindValue(":since", since.toString(Qt::ISODate));
 
     QList<BaseWorkpieceInspectionResult> result;
@@ -743,7 +749,7 @@ CCQDbClientInterface::getBaseWorkpieceInspectionResultByDateTime(
 
     QSqlQuery q(guard.db());
     q.prepare("SELECT * FROM base_workpiece_inspection_result "
-              "WHERE classified_datetime = :dt");
+              "WHERE classfied_datetime = :dt");
     q.bindValue(":dt", dt.toString(Qt::ISODate));
 
     QList<BaseWorkpieceInspectionResult> result;
@@ -771,7 +777,7 @@ CCQDbClientInterface::getBaseWorkpieceInspectionResultByDateTime(
 
     QSqlQuery q(guard.db());
     q.prepare("SELECT * FROM base_workpiece_inspection_result "
-              "WHERE classified_datetime BETWEEN :from AND :to");
+              "WHERE classfied_datetime BETWEEN :from AND :to");
     q.bindValue(":from", from.toString(Qt::ISODate));
     q.bindValue(":to",   to.toString(Qt::ISODate));
 
@@ -802,7 +808,7 @@ CCQDbClientInterface::getBaseWorkpieceInspectionResultByDateTime(
     QSqlQuery q(guard.db());
     q.prepare("SELECT * FROM base_workpiece_inspection_result "
               "WHERE task_id = :taskId "
-              "  AND classified_datetime BETWEEN :from AND :to");
+              "  AND classfied_datetime BETWEEN :from AND :to");
     q.bindValue(":taskId", taskId);
     q.bindValue(":from",   from.toString(Qt::ISODate));
     q.bindValue(":to",     to.toString(Qt::ISODate));
@@ -833,10 +839,10 @@ CCQDbClientInterface::getBaseWorkpieceInspectionResultByDateTime(
 
     QSqlQuery q(guard.db());
     q.prepare("SELECT task_id, product_code, workpiece_id, sn, defect_code, "
-              "is_ng, classified_datetime, final_result, reinspection_result, sn1 "
+              "is_ng, classfied_datetime, final_result, reinspection_result, sn1 "
               "FROM base_workpiece_inspection_result "
               "WHERE task_id = :taskId "
-              "  AND classified_datetime BETWEEN :from AND :to");
+              "  AND classfied_datetime BETWEEN :from AND :to");
     q.bindValue(":taskId", taskId);
     q.bindValue(":from",   from.toString(Qt::ISODate));
     q.bindValue(":to",     to.toString(Qt::ISODate));
@@ -869,7 +875,7 @@ CCQDbClientInterface::getBaseWorkpieceInspectionResultByDateRange(
 
     // ── Main query ────────────────────────────────────────────────────────────
     QString sql = "SELECT * FROM base_workpiece_inspection_result "
-                  "WHERE classified_datetime BETWEEN :from AND :to";
+                  "WHERE classfied_datetime BETWEEN :from AND :to";
     if (!task_id.isEmpty()) {
         // P3 fix: no space before "taskId"
         sql += " AND task_id = :taskId";
